@@ -5,8 +5,10 @@ import cloud.bluesphere.service.DeviceService;
 import io.smallrye.mutiny.Uni;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestPath;
+import org.jboss.resteasy.reactive.RestResponse;
 
 import javax.inject.Inject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
@@ -27,10 +29,22 @@ public class DeviceResource {
     return deviceService.getById(id);
   }
 
-  @POST
-  public Uni<String> add(Device device) {
+  @Path("/udid/{udid}")
+  public Uni<Device> getByUdid(@RestPath String udid){
 
-    return Uni.createFrom().item("sss");
+    return deviceService.getByUdid(udid);
+  }
+
+  @POST
+  public Uni<Device> add(@Valid Device device) {
+    LOG.debugf("Create device: %s", device.toString());
+    return deviceService.create(device);
+  }
+
+  @PUT
+  public Uni<RestResponse> update(Device device) {
+
+    return Uni.createFrom().item(RestResponse.ok());
   }
 
 }

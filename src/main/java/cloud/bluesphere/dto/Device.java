@@ -3,47 +3,63 @@ package cloud.bluesphere.dto;
 import cloud.bluesphere.entity.DeviceEntity;
 
 import javax.validation.constraints.NotBlank;
+import java.util.StringJoiner;
 
-public class Device {
+public class Device implements ToFromEntity<Device, DeviceEntity>{
 
   private String id;
   @NotBlank(message = "Device name can not be blank")
   private String name;
-  private String sn;
-
-  public static Device fromEntity(DeviceEntity deviceEntity){
-    Device device = new Device();
-    device.setId(deviceEntity.getId());
-    device.setName(deviceEntity.getName());
-    device.setSn(deviceEntity.getSn());
-    return device;
-  }
+  @NotBlank(message = "Device udid can not be blank")
+  private String udid;
 
   public String getId() {
     return id;
   }
 
-  public Device setId(String id) {
+  public void setId(String id) {
     this.id = id;
-    return this;
   }
 
   public String getName() {
     return name;
   }
 
-  public Device setName(String name) {
+  public void setName(String name) {
     this.name = name;
+  }
+
+  public String getUdid() {
+    return udid;
+  }
+
+  public void setUdid(String udid) {
+    this.udid = udid;
+  }
+
+  @Override
+  public DeviceEntity toEntity() {
+    DeviceEntity deviceEntity = new DeviceEntity();
+    deviceEntity.setId(this.id);
+    deviceEntity.setName(this.name);
+    deviceEntity.setUdid(this.udid);
+    return deviceEntity;
+  }
+
+  @Override
+  public Device fromEntity(DeviceEntity deviceEntity) {
+    this.id = deviceEntity.getId();
+    this.name = deviceEntity.getName();
+    this.udid = deviceEntity.getUdid();
     return this;
   }
 
-  public String getSn() {
-    return sn;
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", Device.class.getSimpleName() + "[", "]")
+        .add("id='" + id + "'")
+        .add("name='" + name + "'")
+        .add("udid='" + udid + "'")
+        .toString();
   }
-
-  public Device setSn(String sn) {
-    this.sn = sn;
-    return this;
-  }
-
 }
