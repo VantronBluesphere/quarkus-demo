@@ -1,11 +1,12 @@
 package cloud.bluesphere.resource;
 
+import cloud.bluesphere.assist.PageData;
 import cloud.bluesphere.dto.Device;
 import cloud.bluesphere.service.DeviceService;
 import io.smallrye.mutiny.Uni;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.RestPath;
-import org.jboss.resteasy.reactive.RestResponse;
+import org.jboss.resteasy.reactive.RestQuery;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -30,9 +31,23 @@ public class DeviceResource {
   }
 
   @Path("/udid/{udid}")
-  public Uni<Device> getByUdid(@RestPath String udid){
-
+  @GET
+  public Uni<Device> getByUdid(@RestPath String udid) {
+    LOG.debugf("Get device by udid: %s", udid);
     return deviceService.getByUdid(udid);
+  }
+
+  @Path("/udidandname")
+  @GET
+  public Uni<Device> getByUdid(@RestQuery String udid, @RestQuery String name) {
+    LOG.debugf("Get device by udid and name: %s", udid, name);
+    return deviceService.getByUdidAndName(udid, name);
+  }
+
+  @GET
+  public Uni<PageData<Device>> getByPage(@RestQuery int pageNum, @RestQuery int pageSize){
+    LOG.debugf("Get devices by pageNum and pageSize: %s", pageNum, pageSize);
+    return deviceService.getByPage(pageNum, pageSize);
   }
 
   @POST
@@ -42,9 +57,18 @@ public class DeviceResource {
   }
 
   @PUT
-  public Uni<RestResponse> update(Device device) {
+  @Path("/{id}")
+  public Uni<Device> update(@RestPath String id, Device device) {
+    LOG.debugf("Update device: %s, %s", id, device.toString());
+    device.id = id;
+    return deviceService.update(device);
+  }
 
-    return Uni.createFrom().item(RestResponse.ok());
+  @DELETE
+  @Path("/{id}")
+  public Uni<Void> delete(@RestPath String id){
+    LOG.debugf("Delete device: %s", id);
+    return deviceService.delete(id);
   }
 
 }
