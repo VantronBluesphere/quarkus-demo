@@ -5,6 +5,7 @@ import org.jboss.resteasy.reactive.RestResponse;
 public enum ApiErrorCode {
 
   UNKNOWN_EXCEPTION(RestResponse.Status.INTERNAL_SERVER_ERROR),
+  EXTERNAL_SERVICE_EXCEPTION(RestResponse.Status.INTERNAL_SERVER_ERROR),
   CONSTRAINT_VIOLATION_EXCEPTION(RestResponse.Status.BAD_REQUEST),
   DEVICE_NOT_FOUND(RestResponse.Status.NOT_FOUND);
 

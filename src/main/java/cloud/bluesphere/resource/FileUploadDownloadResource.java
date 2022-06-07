@@ -1,8 +1,8 @@
 package cloud.bluesphere.resource;
 
 import cloud.bluesphere.dto.UploadMultipartFormData;
+import io.quarkus.logging.Log;
 import io.smallrye.mutiny.Uni;
-import org.jboss.logging.Logger;
 import org.jboss.resteasy.reactive.MultipartForm;
 import org.jboss.resteasy.reactive.RestResponse;
 
@@ -15,15 +15,13 @@ import java.nio.charset.StandardCharsets;
 @Path("/api/v1")
 public class FileUploadDownloadResource {
 
-  private static final Logger LOG = Logger.getLogger(FileUploadDownloadResource.class);
-
   @POST
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Path("/fileupload")
   public Uni<RestResponse<Void>> form(@MultipartForm UploadMultipartFormData uploadMultipartFormData) {
     // ...
-    LOG.debugf("note: %s, file name: %s, file size: %d, file path: %s",
+    Log.debugf("note: %s, file name: %s, file size: %d, file path: %s",
         uploadMultipartFormData.getNote(), uploadMultipartFormData.getFile().fileName(),
         uploadMultipartFormData.getFile().size(), uploadMultipartFormData.getFile().uploadedFile().toUri());
     return Uni.createFrom().item(RestResponse.ok());
